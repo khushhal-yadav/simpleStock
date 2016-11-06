@@ -6,6 +6,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * Created by khush on 06/11/2016.
@@ -58,14 +59,13 @@ public class FxRate {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null)
-            return  false;
-        if (getClass() != obj.getClass())
-            return false;
-        FxRate other = (FxRate) obj;
-        return Objects.equals(this.currencyFrom, other.currencyFrom)
-                && Objects.equals(this.currencyTo, other.currencyTo)
-                && Objects.equals(this.systemDate, other.systemDate);
+        return Optional.ofNullable(obj)
+                .filter(o -> o.getClass() == getClass())
+                .map(FxRate.class::cast)
+                .filter(o -> Objects.equals(this.currencyFrom, o.currencyFrom))
+                .filter(o -> Objects.equals(this.currencyTo, o.currencyTo))
+                .filter(o -> Objects.equals(this.systemDate, o.systemDate))
+                .isPresent();
     }
 
     public BigDecimal getRate() {

@@ -8,6 +8,7 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * Created by khush on 06/11/2016.
@@ -71,14 +72,13 @@ public class SystemDate {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null)
-            return  false;
-        if (getClass() != obj.getClass())
-            return false;
-        SystemDate other = (SystemDate) obj;
-        return Objects.equals(this.calculationDate, other.calculationDate)
-                && Objects.equals(this.current, other.current)
-                && Objects.equals(this.lastUpdated, other.lastUpdated);
+        return Optional.ofNullable(obj)
+                .filter(o -> o.getClass() == getClass())
+                .map(SystemDate.class::cast)
+                .filter(o -> Objects.equals(this.calculationDate, o.calculationDate))
+                .filter(o -> Objects.equals(this.current, o.current))
+                .filter(o -> Objects.equals(this.lastUpdated, o.lastUpdated))
+                .isPresent();
     }
 
     @Override

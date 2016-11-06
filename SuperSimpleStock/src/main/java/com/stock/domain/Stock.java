@@ -6,6 +6,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * Created by khush on 06/11/2016.
@@ -71,14 +72,13 @@ public class Stock {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null)
-            return  false;
-        if (getClass() != obj.getClass())
-            return false;
-        Stock other = (Stock) obj;
-        return Objects.equals(this.symbol, other.symbol)
-                && Objects.equals(this.exchange, other.exchange)
-                && Objects.equals(this.stockType, other.stockType);
+        return Optional.ofNullable(obj)
+                .filter(o -> o.getClass() == getClass())
+                .map(Stock.class::cast)
+                .filter(o -> Objects.equals(this.symbol, o.symbol))
+                .filter(o -> Objects.equals(this.exchange, o.exchange))
+                .filter(o -> Objects.equals(this.stockType, o.stockType))
+                .isPresent();
     }
 
     public int getFixedDividend() {
