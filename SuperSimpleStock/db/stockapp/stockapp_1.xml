@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="stockapp-1" author="khush">
+        <createTable tableName="system_date">
+            <column name="id" type="integer" autoIncrement="true">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="calculation_date" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_current" type="char(1)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_updated" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="price">
+            <column name="id" type="integer" autoIncrement="true">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="symbol" type="char(3)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="exchange" type="char(4)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="market_price" type="decimal(31, 15)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="currency_code" type="char(3)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="system_date" type="integer">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addUniqueConstraint tableName="price" columnNames="symbol, exchange, system_date"/>
+        <addForeignKeyConstraint baseTableName="price" baseColumnNames="system_date" constraintName="price_system_date"
+                                 referencedTableName="system_date"
+                                 referencedColumnNames="id"/>
+
+        <createTable tableName="fx_rate">
+            <column name="id" type="integer" autoIncrement="true">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="currency_from" type="char(3)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="currency_to" type="char(3)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="fx_rate" type="decimal(31, 15)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="system_date" type="integer">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addUniqueConstraint tableName="fx_rate" columnNames="currency_from, currency_to, system_date"/>
+        <addForeignKeyConstraint baseTableName="fx_rate" baseColumnNames="system_date" constraintName="fx_rate_system_date"
+                                 referencedTableName="system_date"
+                                 referencedColumnNames="id"/>
+
+        <createTable tableName="stock">
+            <column name="id" type="integer" autoIncrement="true">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="symbol" type="char(3)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="exchange" type="char(4)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="stock_type" type="varchar(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_dividend" type="decimal(31, 15)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="fixed_dividend" type="decimal(31, 15)">
+            </column>
+            <column name="par_value" type="decimal(31, 15)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="currency_code" type="char(3)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addUniqueConstraint tableName="stock" columnNames="symbol, exchange, stock_type"/>
+
+        <createTable tableName="trade">
+            <column name="id" type="integer" autoIncrement="true">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="quantity" type="integer">
+                <constraints nullable="false"/>
+            </column>
+            <column name="buy_sell" type="varchar(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="trade_price" type="decimal(31, 15)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="trade_date" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="settlement_date" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="recorded_timestamp" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>

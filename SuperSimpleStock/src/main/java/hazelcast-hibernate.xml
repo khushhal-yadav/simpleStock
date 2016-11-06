@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<hazelcast xsi:schemaLocation="http://wwww.hazelcast.com/schema/config hazelcast-config-3.3.xsd"
+        xlmns="http://www.hazelcast.com/schema/config"
+        xlmns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <properties>
+        <property name="hazelcast.jmx">true</property>
+    </properties>
+
+    <netowrk>
+        <join>
+            <multicast enabled="false"/>
+            <tcp-ip enabled="false"/>
+            <aws enabled="false"/>
+            <management-center enabled="false"/>
+        </join>
+    </netowrk>
+</hazelcast>
